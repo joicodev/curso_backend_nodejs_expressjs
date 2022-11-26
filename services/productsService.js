@@ -3,10 +3,19 @@ const {
 } = require('@faker-js/faker');
 
 class ProductsService {
-
+  
   constructor() {
     this.products = [];
     this.generate();
+  }
+
+  static _productsServiceInstance = null;
+  static getInstance() {
+    if (ProductsService._productsServiceInstance === null) {
+      ProductsService._productsServiceInstance= new ProductsService();
+    }
+
+    return ProductsService._productsServiceInstance;
   }
 
   generate() {
@@ -23,7 +32,7 @@ class ProductsService {
     }
   }
 
-  crear(data) {
+  create(data) {
     try {
       const commerce = faker.commerce;
       const product = {
@@ -37,9 +46,8 @@ class ProductsService {
       this.products.push(product);
       return product["id"];
     } catch (error) {
-      return null;
+      throw new Error("Er");
     }
-
   }
 
   getAll() {
@@ -56,13 +64,9 @@ class ProductsService {
       throw new Error("Product not found");
     }
 
-    const commerce = faker.commerce;
     this.products[index] = {
-      id: id,
-      name: changes["name"] ?? commerce.productName(),
-      price: changes["price"] != null ? parseInt(changes["price"], 10) : parseInt(commerce.price(100), 10),
-      description: changes["description"] ?? commerce.productDescription(),
-      image: changes["image"] ?? faker.image.image()
+      ...this.products[index],
+      ...changes
     }
     
     return id;
