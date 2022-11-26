@@ -42,7 +42,7 @@ class ProductsService {
 
   }
 
-  find() {
+  getAll() {
     return this.products;
   }
 
