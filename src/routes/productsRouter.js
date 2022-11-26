@@ -28,8 +28,7 @@ router.delete('/:id', deleteProduct);
 
 //* Internal Functions
 async function getAll(req, res) {
-  const productService = await ProductsService.getInstance();
-  const products = await productService.getAll();
+  const products = await ProductsService.getAll();
   res.status(201).json({
     status: true,
     message: "Success",
@@ -38,9 +37,8 @@ async function getAll(req, res) {
 }
 
 async function getOne(req, res) {
-  const productService = await ProductsService.getInstance();
   const { id } = req.params;
-  const product = productService.findOne(id);
+  const product = ProductsService.findOne(id);
   if (product != null) {
     res.json({
       status: true,
@@ -57,9 +55,8 @@ async function getOne(req, res) {
 }
 
 async function createProduct(req, res) {
-  const productService = await ProductsService.getInstance();
   const body = req.body;
-  const id = productService.crear(body);
+  const id = ProductsService.create(body);
   try {
     res.json({
       id: id,
@@ -76,11 +73,10 @@ async function createProduct(req, res) {
 }
 
 async function updateProduct(req, res) {
-  const productService = await ProductsService.getInstance();
   const { id } = req.params;
   const body = req.body;
   try {
-    const response = productService.update(id, body);
+    ProductsService.update(id, body);
     res.json({
       id: id,
       status: true,
@@ -96,10 +92,9 @@ async function updateProduct(req, res) {
 }
 
 async function deleteProduct(req, res) {
-  const productService = await ProductsService.getInstance();
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    const data = productService.delete(id);
+    ProductsService.delete(id);
     res.json({
       id: id,
       status: true,

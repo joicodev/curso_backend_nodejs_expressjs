@@ -2,20 +2,20 @@ const {
   faker
 } = require('@faker-js/faker');
 
-class ProductsService {
-  
+class PrivateProductService {
+
   constructor() {
     this.products = [];
     this.generate();
   }
 
-  static _productsServiceInstance = null;
+  static _instance = null;
   static getInstance() {
-    if (ProductsService._productsServiceInstance === null) {
-      ProductsService._productsServiceInstance= new ProductsService();
+    if (PrivateProductService._instance === null) {
+      PrivateProductService._instance = new PrivateProductService();
     }
 
-    return ProductsService._productsServiceInstance;
+    return PrivateProductService._instance;
   }
 
   generate() {
@@ -37,10 +37,10 @@ class ProductsService {
       const commerce = faker.commerce;
       const product = {
         id: faker.datatype.uuid(),
-        name: data["name"] ?? commerce.productName(),
+        name: data["name"] || commerce.productName(),
         price: data["price"] != null ? parseInt(data["price"], 10) : parseInt(commerce.price(100), 10),
-        description: data["description"] ?? commerce.productDescription(),
-        image: data["image"] ?? faker.image.image()
+        description: data["description"] || commerce.productDescription(),
+        image: data["image"] || faker.image.image()
       };
 
       this.products.push(product);
@@ -68,7 +68,7 @@ class ProductsService {
       ...this.products[index],
       ...changes
     }
-    
+
     return id;
   }
 
@@ -83,4 +83,20 @@ class ProductsService {
   }
 }
 
-module.exports = ProductsService;
+class ProductsService {
+  constructor() {
+    throw new Error('Use ProductsService.getInstance()');
+  }
+
+  static getInstance() {
+    if (!ProductsService.instancia) {
+      ProductsService.instancia = new PrivateProductService();
+    }
+
+    return ProductsService.instancia;
+  }
+}
+
+
+
+module.exports = PrivateProductService.getInstance();
