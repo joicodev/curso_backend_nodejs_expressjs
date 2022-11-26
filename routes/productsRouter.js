@@ -1,24 +1,12 @@
-import { faker } from '@faker-js/faker';
-import express from 'express';
+const express = require('express');
+const ProductsService = require('../services/productsService');
 
 const router = express.Router();
+const productService = new ProductsService();
 
 router.get('/', (req, res) => {
-  const productos = [];
-  const { size } = req.query;
-  const limit = size || 100;
-  for (let index = 0; index < limit; index++) {
-    const commerce = faker.commerce;
-    productos.push({
-      id: index + 1,
-      name: commerce.productName(),
-      price: parseInt(commerce.price(100), 10),
-      description: commerce.productDescription(),
-      image: faker.image.image()
-    });
-  }
-
-  res.json(productos)
+  const productos = productService.find();
+  res.status(201).json(productos)
 });
 
 // TODOS LOS ENDPOINT QUE SEAN ESPECÍFICOS DEBEN IR ANTES DE LOS DINÁMICOS
@@ -26,11 +14,17 @@ router.get('/filter', (req, res) => {
   res.send('Estoy filtrando...');
 });
 
+
 router.get('/:id', (req, res) => {
-  res.json({
-    id: req.params.id,
-    name: "Pizza",
-    price: 2500
+  const product = productService.findOne(req.params.id);
+  if (product != null) {
+    res.json(product)
+    return;
+  }
+
+
+  res.status(404).json({
+    message: "Not found!"
   })
 });
 
@@ -43,4 +37,38 @@ router.post('/', (req, res) => {
   });
 });
 
-export default router;
+router.put('/:id', (req, res) => {
+  const {
+    id
+  } = req.params;
+  const body = req.body;
+  res.json({
+    message: "updated",
+    data: body,
+    id
+  });
+});
+
+router.patch('/:id', (req, res) => {
+  const {
+    id
+  } = req.params;
+  const body = req.body;
+  res.json({
+    message: "updated",
+    data: body,
+    id
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  const {
+    id
+  } = req.params;
+  res.json({
+    id,
+    message: "deleted",
+  });
+});
+
+module.exports = router;
