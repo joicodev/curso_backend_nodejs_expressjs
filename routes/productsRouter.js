@@ -31,10 +31,19 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const body = req.body;
-  res.json({
-    message: "created",
-    data: body
-  });
+  const id = productService.crear(body);
+  if (id != null) {
+    res.json({
+      message: "created",
+      data: {id}
+    });
+
+    return;
+  }
+
+  res.status(406).json({
+    message: "Error!"
+  })
 });
 
 router.put('/:id', (req, res) => {

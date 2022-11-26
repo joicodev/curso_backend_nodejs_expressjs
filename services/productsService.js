@@ -1,4 +1,6 @@
-const {faker} = require('@faker-js/faker');
+const {
+  faker
+} = require('@faker-js/faker');
 
 class ProductsService {
 
@@ -21,7 +23,25 @@ class ProductsService {
     }
   }
 
-  crear() {}
+  crear(args) {
+    try {
+      console.log(args);
+      const commerce = faker.commerce;
+      const product = {
+        id: faker.datatype.uuid(),
+        name: args["name"] ? ? commerce.productName(),
+        price: args["price"] != null ? parseInt(args["price"], 10) : parseInt(commerce.price(100), 10),
+        description: args["description"] ? ? commerce.productDescription(),
+        image: args["image"] ? ? faker.image.image()
+      };
+
+      this.products.push(product);
+      return product["id"];
+    } catch (error) {
+      return null;
+    }
+
+  }
 
   find() {
     return this.products;
