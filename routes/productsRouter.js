@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
   if (id != null) {
     res.json({
       message: "created",
-      data: {id}
+      data: { id }
     });
 
     return;
@@ -46,38 +46,55 @@ router.post('/', (req, res) => {
   })
 });
 
+
 router.put('/:id', (req, res) => {
-  const {
-    id
-  } = req.params;
+  const { id } = req.params;
   const body = req.body;
-  res.json({
-    message: "updated",
-    data: body,
-    id
-  });
+  try {
+    const response = productService.update(id, body);
+    res.json({
+      id: id,
+      message: "updated",
+    });
+  } catch (error) {
+    res.status(404).json({
+      id: id,
+      message: `Error: ${error.message}`,
+    });
+  }
 });
 
 router.patch('/:id', (req, res) => {
-  const {
-    id
-  } = req.params;
+  const { id } = req.params;
   const body = req.body;
-  res.json({
-    message: "updated",
-    data: body,
-    id
-  });
+  try {
+    const data = productService.update(id, body);
+    res.json({
+      id: id,
+      message: "updated",
+    });
+  } catch (error) {
+    res.status(404).json({
+      id: id,
+      message: `Error: ${error.message}`,
+    });
+  }
 });
 
 router.delete('/:id', (req, res) => {
-  const {
-    id
-  } = req.params;
-  res.json({
-    id,
-    message: "deleted",
-  });
+  try {
+    const { id } = req.params;
+    const data = productService.delete(id);
+    res.json({
+      id: id,
+      message: "deleted",
+    });
+  } catch (error) {
+    res.status(404).json({
+      id: id,
+      message: `Error: ${error.message}`,
+    });
+  }
 });
 
 module.exports = router;

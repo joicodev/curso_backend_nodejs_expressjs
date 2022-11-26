@@ -23,16 +23,15 @@ class ProductsService {
     }
   }
 
-  crear(args) {
+  crear(data) {
     try {
-      console.log(args);
       const commerce = faker.commerce;
       const product = {
         id: faker.datatype.uuid(),
-        name: args["name"] ? ? commerce.productName(),
-        price: args["price"] != null ? parseInt(args["price"], 10) : parseInt(commerce.price(100), 10),
-        description: args["description"] ? ? commerce.productDescription(),
-        image: args["image"] ? ? faker.image.image()
+        name: data["name"] ?? commerce.productName(),
+        price: data["price"] != null ? parseInt(data["price"], 10) : parseInt(commerce.price(100), 10),
+        description: data["description"] ?? commerce.productDescription(),
+        image: data["image"] ?? faker.image.image()
       };
 
       this.products.push(product);
@@ -51,9 +50,33 @@ class ProductsService {
     return this.products.find(item => item.id === id);
   }
 
-  update() {}
+  update(id, changes) {
+    const index = this.products.findIndex(item => item.id === id);
+    if (index === -1) {
+      throw new Error("Product not found");
+    }
 
-  delete() {}
+    const commerce = faker.commerce;
+    this.products[index] = {
+      id: id,
+      name: changes["name"] ?? commerce.productName(),
+      price: changes["price"] != null ? parseInt(changes["price"], 10) : parseInt(commerce.price(100), 10),
+      description: changes["description"] ?? commerce.productDescription(),
+      image: changes["image"] ?? faker.image.image()
+    }
+    
+    return id;
+  }
+
+  delete(id) {
+    const index = this.products.findIndex(item => item.id === id);
+    if (index === -1) {
+      throw new Error("Product not found");
+    }
+
+    this.products.splice(index, 1);
+    return id;
+  }
 }
 
 module.exports = ProductsService;
