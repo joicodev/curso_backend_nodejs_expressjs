@@ -1,0 +1,28 @@
+_id: req_c352c0c48fb043e3bd9bfdf8cec87994
+type: Request
+parentId: fld_a7c4cd2fdeba44f6802aeb50fc832d6b
+modified: 1669475417092
+created: 1669427723844
+url: localhost:3000/api/v1/products/1c6e8290-3525-47ca-b7fa-422fa247c279
+name: Update partial product
+description: ""
+method: PATCH
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "New Product"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1669040522452
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

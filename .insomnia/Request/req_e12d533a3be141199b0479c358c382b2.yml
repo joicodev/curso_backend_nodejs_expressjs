@@ -1,0 +1,31 @@
+_id: req_e12d533a3be141199b0479c358c382b2
+type: Request
+parentId: fld_a7c4cd2fdeba44f6802aeb50fc832d6b
+modified: 1669476311722
+created: 1668653078563
+url: localhost:3000/api/v1/products
+name: create product
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "New Product",
+    	"price": 1200,
+    	"image": "https://loremflickr.com/640/480/food"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_5b8b9bac06c8433d92c2ed616b48b7e8
+authentication: {}
+metaSortKey: -1669427686093
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

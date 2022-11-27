@@ -1,0 +1,21 @@
+_id: req_4717f52c3a784ef194386ef8f84701ef
+type: Request
+parentId: fld_a7c4cd2fdeba44f6802aeb50fc832d6b
+modified: 1669473655736
+created: 1668651449977
+url: localhost:3000/api/v1/products
+name: Get all
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1669427686118
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

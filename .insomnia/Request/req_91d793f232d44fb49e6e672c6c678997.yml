@@ -1,0 +1,30 @@
+_id: req_91d793f232d44fb49e6e672c6c678997
+type: Request
+parentId: fld_a7c4cd2fdeba44f6802aeb50fc832d6b
+modified: 1669475425818
+created: 1669427686068
+url: localhost:3000/api/v1/products/1c6e8290-3525-47ca-b7fa-422fa247c279
+name: Update product
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    		"name": "Nuevo producto",
+    		"price": 1763,
+    		"description": "Mensaje del nuevo producto"
+    	}
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1669427686068
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
