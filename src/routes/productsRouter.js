@@ -17,7 +17,7 @@ router.get('/:id', getOne);
 //! ADD new product
 router.post('/', createProduct);
 
-//* UPDATE 
+//* UPDATE
 router.put('/:id', updateProduct);
 
 //* UPDATE partial product
@@ -27,34 +27,36 @@ router.patch('/:id', updateProduct);
 router.delete('/:id', deleteProduct);
 
 //* Internal Functions
-async function getAll(req, res) {
-  const products = await ProductsService.getAll();
-  res.status(201).json({
-    status: true,
-    message: "Success",
-    data: products
-  })
+async function getAll(req, res, next) {
+  try {
+    const products = await ProductsService.getAll();
+    res.status(200).json({
+      status: true,
+      message: "Success",
+      data: products
+    })
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function getOne(req, res) {
-  const { id } = req.params;
-  const product = ProductsService.findOne(id);
-  if (product != null) {
+async function getOne(req, res, next) {
+  const {
+    id
+  } = req.params;
+  try {
+    const product = ProductsService.findOne(id);
     res.json({
       status: true,
       data: product,
       message: "Success"
     })
-  } else {
-    res.status(404).json({
-      id: id,
-      status: false,
-      message: "Not found"
-    })
+  } catch (error) {
+    next(error);
   }
 }
 
-async function createProduct(req, res) {
+async function createProduct(req, res, next) {
   const body = req.body;
   const id = ProductsService.create(body);
   try {
@@ -64,16 +66,14 @@ async function createProduct(req, res) {
       message: "created",
     });
   } catch (error) {
-    res.status(406).json({
-      id: id,
-      status: false,
-      message: `Error: ${error.message}`,
-    })
+    next(error);
   }
 }
 
-async function updateProduct(req, res) {
-  const { id } = req.params;
+async function updateProduct(req, res, next) {
+  const {
+    id
+  } = req.params;
   const body = req.body;
   try {
     ProductsService.update(id, body);
@@ -83,16 +83,14 @@ async function updateProduct(req, res) {
       message: "updated",
     });
   } catch (error) {
-    res.status(404).json({
-      id: id,
-      status: false,
-      message: `Error: ${error.message}`,
-    });
+    next(error);
   }
 }
 
-async function deleteProduct(req, res) {
-  const { id } = req.params;
+async function deleteProduct(req, res, next) {
+  const {
+    id
+  } = req.params;
   try {
     ProductsService.delete(id);
     res.json({
@@ -101,11 +99,7 @@ async function deleteProduct(req, res) {
       message: "deleted",
     });
   } catch (error) {
-    res.status(404).json({
-      id: id,
-      status: false,
-      message: `Error: ${error.message}`,
-    });
+    next(error);
   }
 }
 

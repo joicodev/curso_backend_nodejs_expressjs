@@ -1,15 +1,16 @@
 const {
   faker
 } = require('@faker-js/faker');
+const boom = require("@hapi/boom");
 
 class PrivateProductService {
+  static _instance = null;
 
   constructor() {
     this.products = [];
     this.generate();
   }
 
-  static _instance = null;
   static getInstance() {
     if (PrivateProductService._instance === null) {
       PrivateProductService._instance = new PrivateProductService();
@@ -27,7 +28,8 @@ class PrivateProductService {
         name: commerce.productName(),
         price: parseInt(commerce.price(100), 10),
         description: commerce.productDescription(),
-        image: faker.image.image()
+        image: faker.image.image(),
+        isBlocked: faker.datatype.boolean(),
       });
     }
   }
@@ -40,13 +42,14 @@ class PrivateProductService {
         name: data["name"] || commerce.productName(),
         price: data["price"] != null ? parseInt(data["price"], 10) : parseInt(commerce.price(100), 10),
         description: data["description"] || commerce.productDescription(),
-        image: data["image"] || faker.image.image()
+        image: data["image"] || faker.image.image(),
+        isBlocked: faker.datatype.boolean
       };
 
       this.products.push(product);
       return product["id"];
     } catch (error) {
-      throw new Error("Er");
+      throw boom.internal("Error to create Products");
     }
   }
 
@@ -55,13 +58,30 @@ class PrivateProductService {
   }
 
   findOne(id) {
-    return this.products.find(item => item.id === id);
+    const product = this.products.find(item => item.id === id);
+    if (!product) {
+      const boomErr = boom.notFound("Product not found", {
+        id: id,
+        status: false,
+        message: "Product not found"
+      });
+
+      throw boomErr;
+    } else if (product.isBlocked) {
+      throw boom.conflict("Producto bloqueado", {
+        id: id,
+        status: false,
+        message: "Producto no puede ser mostrado"
+      });
+    }
+
+    return product;
   }
 
   update(id, changes) {
     const index = this.products.findIndex(item => item.id === id);
     if (index === -1) {
-      throw new Error("Product not found");
+      throw boom.notFound("Error to update: Product not found");
     }
 
     this.products[index] = {
@@ -75,7 +95,7 @@ class PrivateProductService {
   delete(id) {
     const index = this.products.findIndex(item => item.id === id);
     if (index === -1) {
-      throw new Error("Product not found");
+      throw boom.notFound("Error to delete: Product not found");
     }
 
     this.products.splice(index, 1);
@@ -83,7 +103,7 @@ class PrivateProductService {
   }
 }
 
-class ProductsService {
+/*class ProductsService {
   constructor() {
     throw new Error('Use ProductsService.getInstance()');
   }
@@ -95,7 +115,7 @@ class ProductsService {
 
     return ProductsService.instancia;
   }
-}
+}*/
 
 
 
