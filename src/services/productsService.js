@@ -57,8 +57,29 @@ class PrivateProductService {
     return this.products;
   }
 
-  findOne(id) {
-    const product = this.products.find(item => item.id === id);
+  async getById(id) {
+    return new Promise((resolve, reject) => {
+      const product = this.products.find(item => item.id === id);
+      if (!product) {
+        const boomErr = boom.notFound("Product not found", {
+          id: id,
+          status: false,
+          message: "Product not found"
+        });
+
+        reject(boomErr);
+      } else if (product.isBlocked) {
+        reject(boom.conflict("Producto bloqueado", {
+          id: id,
+          status: false,
+          message: "Producto no puede ser mostrado"
+        }));
+      }
+
+      resolve(product);
+    });
+
+    /*const product = this.products.find(item => item.id === id);
     if (!product) {
       const boomErr = boom.notFound("Product not found", {
         id: id,
@@ -75,7 +96,7 @@ class PrivateProductService {
       });
     }
 
-    return product;
+    return product; */
   }
 
   update(id, changes) {

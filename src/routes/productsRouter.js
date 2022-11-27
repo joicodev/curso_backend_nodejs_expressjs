@@ -45,7 +45,7 @@ async function getOne(req, res, next) {
     id
   } = req.params;
   try {
-    const product = ProductsService.findOne(id);
+    const product = await ProductsService.getById(id);
     res.json({
       status: true,
       data: product,
