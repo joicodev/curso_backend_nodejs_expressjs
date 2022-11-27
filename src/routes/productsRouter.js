@@ -1,5 +1,11 @@
 const express = require('express');
 const ProductsService = require('../services/productsService');
+const validatorHandler = require('../middleware/validator_handler');
+const {
+  createProductSchema,
+  updateProductSchema,
+  getProductSchema
+} = require('../schemas/productSchema');
 
 const router = express.Router();
 
@@ -11,14 +17,22 @@ router.get('/filter', (req, res) => {
   res.send('Estoy filtrando...');
 });
 
+
+/*NOTA: Agregamos el middleware "validatorHandler" y le pasamos por parámetro el schema que
+  queremos usar y la propiedad del request donde sacará los datos enviados por el cliente*/
 //* GET product by ID
-router.get('/:id', getOne);
+router.get('/:id', validatorHandler(getProductSchema, 'params'), getOne);
 
 //! ADD new product
-router.post('/', createProduct);
+router.post('/', validatorHandler(createProductSchema, 'body'), createProduct);
 
 //* UPDATE
-router.put('/:id', updateProduct);
+router.put(
+  '/:id', 
+  validatorHandler(getProductSchema, 'params'),
+  validatorHandler(updateProductSchema, 'body'),
+  updateProduct
+);
 
 //* UPDATE partial product
 router.patch('/:id', updateProduct);

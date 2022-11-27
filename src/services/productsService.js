@@ -39,8 +39,8 @@ class PrivateProductService {
       const commerce = faker.commerce;
       const product = {
         id: faker.datatype.uuid(),
-        name: data["name"] || commerce.productName(),
-        price: data["price"] != null ? parseInt(data["price"], 10) : parseInt(commerce.price(100), 10),
+        name: data["name"],
+        price: parseInt(data["price"], 10),
         description: data["description"] || commerce.productDescription(),
         image: data["image"] || faker.image.image(),
         isBlocked: faker.datatype.boolean
